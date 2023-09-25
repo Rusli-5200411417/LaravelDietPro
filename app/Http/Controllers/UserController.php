@@ -20,4 +20,20 @@ class UserController extends Controller
 
             return view ('new-user',compact('user'));
     }
+
+    public function dailyUsers()
+    {
+        // Query untuk mengambil jumlah pengguna setiap hari
+        $dailyUsers = User::selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->groupBy('date')
+            ->get();
+
+        $data = [];
+
+        foreach ($dailyUsers as $dailyUser) {
+            $data[$dailyUser->date] = $dailyUser->count;
+        }
+
+        return response()->json($data);
+    }
 }

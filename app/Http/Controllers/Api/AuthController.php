@@ -41,11 +41,6 @@ class AuthController extends Controller {
       'email' => 'required|unique:users',
       'username' => 'required|unique:users',
       'nama' => 'required',
-      'usia' => 'required',
-      'tinggi_badan' => 'required',
-      'berat_badan' => 'required',
-      'jenis_kelamin' => 'required',
-      'aktivitas' => 'required',
       'password' => 'required|min:6',
     ]);
 
@@ -53,17 +48,10 @@ class AuthController extends Controller {
       return $this->error($validasi->errors()->first());
     }
 
-    $kebutuhan_kalori = $this->calculateCalorieNeeds(
-      $request->usia,
-      $request->jenis_kelamin,
-      $request->berat_badan,
-      $request->tinggi_badan,
-      $request->aktivitas
-  );
 
   $user = User::create(array_merge($request->all(), [
       'password' => bcrypt($request->password),
-      'kebutuhan_kalori' => $kebutuhan_kalori,
+      // 'kebutuhan_kalori' => $kebutuhan_kalori,
       'role' => 'user'
   ]));
 
@@ -81,25 +69,6 @@ class AuthController extends Controller {
     if (!$user) {
         return $this->error("Tidak ada user");
     }
-
-    // Validasi username
-    $usernameExists = User::where('username', $request->input('username'))
-                           ->where('id', '!=', $id)
-                           ->exists();
-
-    if ($usernameExists) {
-        return $this->error("Username sudah digunakan");
-    }
-
-    // Validasi email
-    $emailExists = User::where('email', $request->input('email'))
-                        ->where('id', '!=', $id)
-                        ->exists();
-
-    if ($emailExists) {
-        return $this->error("Email sudah digunakan");
-    }
-
     // Simpan data lama sebelum pembaruan
     $oldData = $user->toArray();
 
@@ -149,8 +118,8 @@ class AuthController extends Controller {
 
     // Define gender-specific constants
     $genderConstants = [
-        'laki-laki' => 66.5,
-        'perempuan' => 655.1,
+        'Laki-laki' => 66.5,
+        'Perempuan' => 655.1,
     ];
 
     // Calculate BMR based on gender

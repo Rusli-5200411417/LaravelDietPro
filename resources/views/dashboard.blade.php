@@ -65,10 +65,9 @@
     <div class="row">
       <!-- Left col -->
       <section class="col-lg-7 connectedSortable">
+        <canvas id="userChart" width="400" height="200"></canvas>
       </section>
-      <section class="col-lg-5 connectedSortable">
-
-      </section>
+    
     </div>
   </div>
 </div>
